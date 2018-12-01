@@ -1,12 +1,31 @@
 import React, { Component } from "react";
 import logo from "./logo.svg";
 import "./App.css";
+import { subscribeToTimer } from './api';
+import schoen1 from './schoen1.png';
+import schoen2 from './schoen2.png';
+
+function unicodeEscape(str) {
+	return str.replace(/[\s\S]/g, function(character) {
+		var escape = character.charCodeAt().toString(16),
+		    longhand = escape.length > 2;
+		return '\\' + (longhand ? 'u' : 'x') + ('0000' + escape).slice(longhand ? -4 : -2);
+	});
+}
+
 class App extends Component {
     state = {
         response: "",
         post: "",
-        responseToPost: ""
+        responseToPost: "",
+        shoe: 'no shoe found'
     };
+    constructor(props) {
+        super(props);
+        subscribeToTimer((err, shoe) => this.setState({ 
+            shoe: shoe.slice(1,shoe.length)
+          }));
+    }
     componentDidMount() {
         this.callApi()
             .then(res => this.setState({ response: res.express }))
@@ -34,9 +53,9 @@ class App extends Component {
         return (
             <div className="App">
                 <header className="App-header">
-                    <img src={logo} className="App-logo" alt="logo" />
+                    {/* <img src={logo} className="App-logo" alt="logo" /> */}
                     <p>
-                        Edit <code>src/App.js</code> and save to reload.
+                    This is the shoe: <code>{this.state.shoe}</code>
                     </p>
                     <a
                         className="App-link"
@@ -47,6 +66,8 @@ class App extends Component {
                         Learn React
                     </a>
                 </header>
+                {this.state.shoe === 'schoen1' && <img src={schoen1} />}
+                {this.state.shoe === 'schoen2' && <img src={schoen2} />}
                 <p>{this.state.response}</p>
                 <form onSubmit={this.handleSubmit}>
                     <p>

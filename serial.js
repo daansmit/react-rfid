@@ -1,13 +1,13 @@
 const SerialPort = require("serialport");
 const Readline = require("@serialport/parser-readline");
-const serialport = new SerialPort("/dev/cu.usbmodem143101", {
-    baudRate: 115200
+const serialport = new SerialPort("/dev/cu.usbmodem141101", {
+    baudRate: 9600
 });
 
 const readParser = serialport.pipe(new Readline({ delimiter: "\r\n" }));
 readParser.on("data", console.log);
 
-// const Ready = require("@serialport/parser-ready");
+const Ready = require("@serialport/parser-ready");
 const readyParser = serialport.pipe(new Ready({ delimiter: "\r\n" }));
 readyParser.on("ready", message => {
     console.log("ready", message);
